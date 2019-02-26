@@ -9,7 +9,14 @@ const store = new Vuex.Store({
     token: null,
     user: null,
   },
-  getters: {},
+  getters: {
+    USER: state => {
+      return state.user;
+    },
+    IS_LOGIN: state => {
+      return !!state.token;
+    }
+  },
   mutations: {
     SET_TOKEN: (state, payload) => {
       state.token = payload;
@@ -19,14 +26,17 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    LOG_IN: async (context, payload) => {
-      const { user, access_token } = await AuthService.login(payload);
-      await AuthService.storeToken(access_token);
-      await AuthService.setHeader(access_token);
-      await context.commit('SET_IS_LOGIN', access_token);
-      
-      await AuthService.storeUser(user);
-      await context.commit('SET_USER', user);
+    LOG_IN: (context, payload) => {
+      return AuthService.login(payload).then(async (token) => {
+        const { user, access_token } = token;
+        AuthService.storeToken(access_token);
+        AuthService.setHeader(access_token);
+        await context.commit('SET_TOKEN', access_token);
+
+        AuthService.storeUser(user);
+        await context.commit('SET_USER', user);
+        return user;
+      });
     }
   }
 });

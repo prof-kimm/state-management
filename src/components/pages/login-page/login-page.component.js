@@ -23,21 +23,34 @@ export default {
     updateIsFormValidated() {
       const fields = this.$refs.formData.fields;
       this.isFormValidated = fields.reduce((acc, field) => {
-        let valid = (field.isRequired && field.validateState === 'success');
-        let noError = (!field.isRequired && field.validateState !== 'error');
+        const valid = (field.isRequired && field.validateState === 'success');
+        const noError = (!field.isRequired && field.validateState !== 'error');
         return acc && (valid || noError);
       }, true);
     },
     signIn() {
       if (this.isFormValidated) {
-      /* eslint-disable */
-        console.log(this.formData.email);
-        console.log(this.formData.password);
-        this.$store.dispatch('LOG_IN', {
+        const credentials = {
           email: this.formData.email,
           password: this.formData.password
-        });
+        };
+        this.$store.dispatch('LOG_IN', credentials).then(
+          (user) => this.onLoginSuccessful(user),
+          (error) => this.onLoginFailed(error)
+        );
       }
-    }
+    },
+    onLoginSuccessful(user) {
+      if (!user) {
+        throw new Error('Something went wrong!');
+      }
+
+      this.$router.push('dashboard');
+    },
+
+    onLoginFailed(error) {
+      /* eslint-disable */
+      console.error(error);
+    },
   }
 };

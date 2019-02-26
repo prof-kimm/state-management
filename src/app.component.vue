@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container>
-      <el-aside width="200px"></el-aside>
+      <el-aside width="200px" v-if="isLogIn"></el-aside>
       <el-main>
         <router-view></router-view>
       </el-main>
