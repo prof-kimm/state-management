@@ -6,8 +6,6 @@
           <span class="form-title-text">Sign In</span>
         </div>
         <div class="form-body-wrapper">
-          <!-- <input v-model="formData.email" name="email" placeholder="Email"/> -->
-          <!-- <input v-model="formData.password" name="password" placeholder="Password"/> -->
           <el-form :model="formData" ref="formData" @focusout.native="updateIsFormValidated">
             <el-form-item :rules="rules.email" prop="email">
               <el-input placeholder="Email" v-model="formData.email"></el-input>

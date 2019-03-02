@@ -5,6 +5,8 @@ const AuthService = {
     return Axios.post('http://localhost:3000/auth/login', credentials)
       .then(response => {
         if (response.status === 200 || response.status === 201) {
+        /* eslint-disable */
+          console.log(response);
           const { payload } = response.data;
           return payload;
         }
